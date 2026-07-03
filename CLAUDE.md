@@ -20,9 +20,28 @@ The project has two halves — the **content** (Markdown documents) and the **se
 
 The server does **not** read the documents from local/hard-coded files. It downloads them at runtime via the **GitHub API** (starting from `designs/index.json`, then the referenced documents). This is deliberate: the guidance can be edited, appended to, and updated on GitHub **without releasing a new build of the tool**. When changing how documents are loaded, preserve this property — new or updated documents committed to `designs/` must be servable without shipping a new version of the server.
 
-## Current state
+## The server project (`src/4dotnet-csharp-style-guide`)
 
-Repository is an early scaffold — as of the initial commit only `README.md`, `LICENSE`, and `.gitignore` exist; the `designs/` content and `src/` server are not created yet. Once the `src/` project exists, update this file with the real build/test/run commands (`dotnet build`, `dotnet test`, running a single test, launching the MCP server) and the concrete project layout.
+A .NET 10 console app (`net10.0`, assembly name `4dotnet-csharp-style-guide`, root namespace `FourDotNet.CSharpStyleGuide`) that runs as a **stdio** MCP server using the `ModelContextProtocol` SDK.
+
+- **`Program.cs`** — generic-host bootstrap. Binds the `GitHub` config section, registers a typed `HttpClient` against `https://api.github.com/`, and registers the MCP server (name set explicitly to `4dotnet-csharp-style-guide`) with `StyleGuideTools`. Logging goes to **stderr** — stdout is the JSON-RPC channel and must not be written to.
+- **`Configuration/GitHubOptions.cs`** — the `GitHub` config section: `Organization` (default `4Dotnet`), `Repository` (default `csharp-style-guide`), `Branch` (default `main`), `DesignsPath` (default `designs`), and an optional `Token` for higher rate limits / private repos. Defaults also live in `appsettings.json`.
+- **`Documents/`** — `DocumentDescriptor`/`DocumentIndex` (deserialized `index.json`), the `IStyleGuideDocumentService` contract, and `GitHubStyleGuideDocumentService`, which fetches `index.json` and each document via the **GitHub Contents API** (`GET repos/{org}/{repo}/contents/{path}?ref={branch}` with `Accept: application/vnd.github.raw+json`). The manifest is cached in-process for 5 minutes.
+- **`Tools/StyleGuideTools.cs`** — the three MCP tools: `list_documents`, `search_documents` (keyword match over id/title/summary/type/status/tags), and `get_document` (full Markdown by id).
+
+Because documents are fetched from GitHub at runtime, the tools serve whatever is on the configured branch — they will only see documents that have been **committed and pushed**, not local working-tree changes.
+
+### Commands
+
+```bash
+# build
+dotnet build src/4dotnet-csharp-style-guide/4dotnet-csharp-style-guide.csproj
+
+# run the server (stdio; talk MCP JSON-RPC over stdin/stdout)
+dotnet run --project src/4dotnet-csharp-style-guide/4dotnet-csharp-style-guide.csproj
+```
+
+There is no test project yet. When one is added, document how to run it (and a single test) here.
 
 ## Working notes
 

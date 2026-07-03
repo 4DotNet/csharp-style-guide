@@ -13,6 +13,16 @@
       "tags": ["dotnet", "target-framework", "net10", "standard"]
     },
     {
+      "id": "adr-0002",
+      "type": "adr",
+      "title": "Use minimal APIs instead of controllers",
+      "path": "adr/0002-minimal-apis-over-controllers.md",
+      "status": "accepted",
+      "date": "2026-07-03",
+      "summary": "All new HTTP endpoints must be written as minimal API endpoints. Adding new controller endpoints is strictly prohibited.",
+      "tags": ["aspnetcore", "web-api", "minimal-api", "controllers", "endpoints", "standard"]
+    },
+    {
       "id": "guideline-unit-testing",
       "type": "guideline",
       "title": "Unit testing",
