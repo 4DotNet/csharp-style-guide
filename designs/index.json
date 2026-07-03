@@ -43,6 +43,36 @@
       "tags": ["architecture", "modular-monolith", "microservices", "bounded-context", "module", "abstractions", "solution-structure", "shared"]
     },
     {
+      "id": "adr-0005",
+      "type": "adr",
+      "title": "Command Query Responsibility Segregation (CQRS)",
+      "path": "adr/0005-cqrs-pattern.md",
+      "status": "accepted",
+      "date": "2026-07-03",
+      "summary": "Use CQRS with hand-written base classes in a shared project for command, query, command handler and query handler. HTTP requests receive a DTO record; the endpoint converts it to a command or query and dispatches to a DI-resolved handler. Queries always return a response, command responses are optional. External CQRS/mediator libraries are strictly prohibited.",
+      "tags": ["cqrs", "command", "query", "handler", "dto", "dependency-injection", "no-external-libraries", "shared"]
+    },
+    {
+      "id": "adr-0006",
+      "type": "adr",
+      "title": "Organize code into feature slices",
+      "path": "adr/0006-feature-slices.md",
+      "status": "accepted",
+      "date": "2026-07-03",
+      "summary": "Every endpoint is a feature (CreateUser, UpdateUser, ...). Features are always organized in the module's Features namespace, with a per-feature namespace named after the feature that contains the command or query and its handler. This organization is strictly required.",
+      "tags": ["feature-slice", "vertical-slice", "features", "namespace", "cqrs", "organization", "module"]
+    },
+    {
+      "id": "adr-0007",
+      "type": "adr",
+      "title": "HTTP endpoints live in the module, not the API project",
+      "path": "adr/0007-http-and-modules.md",
+      "status": "accepted",
+      "date": "2026-07-03",
+      "summary": "All HTTP endpoint mappings are organized in the module library; API projects contain no endpoint mappings. Every module exposes two extension methods: one on the host builder to register all handlers (AddCartModule()) and one on the web app to map all endpoints (MapCartEndpoints()). Endpoints live in an Endpoints namespace and use MapGroup pragmatically.",
+      "tags": ["http", "endpoints", "module", "portability", "dependency-injection", "minimal-api", "mapgroup", "extension-method"]
+    },
+    {
       "id": "guideline-unit-testing",
       "type": "guideline",
       "title": "Unit testing",
