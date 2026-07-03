@@ -1,0 +1,26 @@
+{
+  "$schema": "./index.schema.json",
+  "version": 1,
+  "documents": [
+    {
+      "id": "adr-0001",
+      "type": "adr",
+      "title": "Adopt .NET 10 as the standard for all .NET projects",
+      "path": "adr/0001-adopt-dotnet-10.md",
+      "status": "accepted",
+      "date": "2026-07-03",
+      "summary": "All .NET projects must target .NET 10 (net10.0). Projects referencing a lower version of .NET are not allowed.",
+      "tags": ["dotnet", "target-framework", "net10", "standard"]
+    },
+    {
+      "id": "guideline-unit-testing",
+      "type": "guideline",
+      "title": "Unit testing",
+      "path": "guidelines/unit-testing.md",
+      "status": "accepted",
+      "date": "2026-07-03",
+      "summary": "Use xUnit with the xunit.v3 NuGet package. Moq and Bogus.NET are approved for mocking and fake data. FluentAssertions is not allowed (commercial license).",
+      "tags": ["testing", "unit-testing", "xunit", "xunit.v3", "moq", "bogus", "fluentassertions"]
+    }
+  ]
+}

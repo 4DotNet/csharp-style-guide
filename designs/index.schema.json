@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/4dotnet/csharp-style-guide/designs/index.schema.json",
+  "title": "Style guide document index",
+  "description": "Manifest describing the ADRs and guideline documents served over MCP from the designs folder.",
+  "type": "object",
+  "required": ["version", "documents"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "version": {
+      "type": "integer",
+      "description": "Schema/manifest version.",
+      "minimum": 1
+    },
+    "documents": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/document" }
+    }
+  },
+  "$defs": {
+    "document": {
+      "type": "object",
+      "required": ["id", "type", "title", "path", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Stable unique identifier for the document.",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "type": {
+          "type": "string",
+          "description": "Kind of document.",
+          "enum": ["adr", "guideline"]
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "description": "Path to the document relative to the designs folder.",
+          "pattern": "^(adr|guidelines)/.+\\.md$"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["proposed", "accepted", "deprecated", "superseded"]
+        },
+        "date": {
+          "type": "string",
+          "format": "date",
+          "description": "ISO-8601 date (YYYY-MM-DD)."
+        },
+        "summary": {
+          "type": "string",
+          "description": "Short description surfaced to MCP clients when listing documents."
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}
