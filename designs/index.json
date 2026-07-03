@@ -33,6 +33,16 @@
       "tags": ["ddd", "domain-model", "value-object", "encapsulation", "validation", "state", "shared", "core"]
     },
     {
+      "id": "adr-0004",
+      "type": "adr",
+      "title": "Modular Monolith or Microservices solution structure",
+      "path": "adr/0004-modular-monolith-or-microservices-structure.md",
+      "status": "accepted",
+      "date": "2026-07-03",
+      "summary": "Every solution is a Modular Monolith or Microservices layout. Each bounded context is one module of two projects (module + abstractions). Microservices add a per-module API project; the modular monolith has one root API project. Shared code lives in a Shared folder and the whole solution is rooted under src.",
+      "tags": ["architecture", "modular-monolith", "microservices", "bounded-context", "module", "abstractions", "solution-structure", "shared"]
+    },
+    {
       "id": "guideline-unit-testing",
       "type": "guideline",
       "title": "Unit testing",
