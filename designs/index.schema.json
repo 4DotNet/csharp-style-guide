@@ -62,6 +62,39 @@
           "type": "array",
           "items": { "type": "string" },
           "uniqueItems": true
+        },
+        "supersedes": {
+          "type": "string",
+          "description": "Id of the document this one supersedes; marks the older document inactive."
+        },
+        "rules": {
+          "type": "array",
+          "description": "Concrete, checkable rules declared by this document.",
+          "items": { "$ref": "#/$defs/rule" }
+        }
+      }
+    },
+    "rule": {
+      "type": "object",
+      "required": ["id", "rule", "severity"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "rule": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The rule, stated as an imperative."
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["required", "prohibited", "recommended"]
+        },
+        "appliesTo": {
+          "type": "string",
+          "description": "The area the rule applies to, e.g. 'web-api', 'tests'."
         }
       }
     }

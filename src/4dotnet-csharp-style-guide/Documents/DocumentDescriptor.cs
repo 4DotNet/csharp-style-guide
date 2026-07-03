@@ -32,6 +32,38 @@ public sealed class DocumentDescriptor
 
     [JsonPropertyName("tags")]
     public IReadOnlyList<string> Tags { get; set; } = [];
+
+    /// <summary>
+    /// Id of the document this one supersedes, when set. Used to mark the older
+    /// document as inactive and to link related documents.
+    /// </summary>
+    [JsonPropertyName("supersedes")]
+    public string? Supersedes { get; set; }
+
+    /// <summary>The concrete, checkable rules captured by this document.</summary>
+    [JsonPropertyName("rules")]
+    public IReadOnlyList<RuleDescriptor> Rules { get; set; } = [];
+}
+
+/// <summary>
+/// A single concrete, checkable rule declared by a document in the manifest.
+/// </summary>
+public sealed class RuleDescriptor
+{
+    [JsonPropertyName("id")]
+    public string Id { get; set; } = string.Empty;
+
+    /// <summary>The rule itself, stated as an imperative.</summary>
+    [JsonPropertyName("rule")]
+    public string Rule { get; set; } = string.Empty;
+
+    /// <summary>Severity: <c>required</c>, <c>prohibited</c> or <c>recommended</c>.</summary>
+    [JsonPropertyName("severity")]
+    public string Severity { get; set; } = string.Empty;
+
+    /// <summary>The area the rule applies to, e.g. <c>web-api</c>, <c>tests</c>.</summary>
+    [JsonPropertyName("appliesTo")]
+    public string? AppliesTo { get; set; }
 }
 
 /// <summary>Deserialized shape of <c>designs/index.json</c>.</summary>

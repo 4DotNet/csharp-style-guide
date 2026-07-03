@@ -10,7 +10,21 @@
       "status": "accepted",
       "date": "2026-07-03",
       "summary": "All .NET projects must target .NET 10 (net10.0). Projects referencing a lower version of .NET are not allowed.",
-      "tags": ["dotnet", "target-framework", "net10", "standard"]
+      "tags": ["dotnet", "target-framework", "net10", "standard"],
+      "rules": [
+        {
+          "id": "adr-0001-r1",
+          "rule": "Target .NET 10 (net10.0) in every .NET project.",
+          "severity": "required",
+          "appliesTo": "all-dotnet-projects"
+        },
+        {
+          "id": "adr-0001-r2",
+          "rule": "Do not reference a .NET version lower than net10.0.",
+          "severity": "prohibited",
+          "appliesTo": "all-dotnet-projects"
+        }
+      ]
     },
     {
       "id": "adr-0002",
@@ -20,7 +34,21 @@
       "status": "accepted",
       "date": "2026-07-03",
       "summary": "All new HTTP endpoints must be written as minimal API endpoints. Adding new controller endpoints is strictly prohibited.",
-      "tags": ["aspnetcore", "web-api", "minimal-api", "controllers", "endpoints", "standard"]
+      "tags": ["aspnetcore", "web-api", "minimal-api", "controllers", "endpoints", "standard"],
+      "rules": [
+        {
+          "id": "adr-0002-r1",
+          "rule": "Write all new HTTP endpoints as minimal API endpoints.",
+          "severity": "required",
+          "appliesTo": "web-api"
+        },
+        {
+          "id": "adr-0002-r2",
+          "rule": "Do not add new controller-based endpoints.",
+          "severity": "prohibited",
+          "appliesTo": "web-api"
+        }
+      ]
     },
     {
       "id": "adr-0003",
@@ -30,7 +58,33 @@
       "status": "accepted",
       "date": "2026-07-03",
       "summary": "Entities are rich domain models with public getters and private setters. Changes go through intent-revealing SetX() functions that validate before assigning; multi-value changes use validated value objects. Models track lifecycle state (New, Pristine, Touched, Modified, Deleted) with base-class plumbing kept in a shared project.",
-      "tags": ["ddd", "domain-model", "value-object", "encapsulation", "validation", "state", "shared", "core"]
+      "tags": ["ddd", "domain-model", "value-object", "encapsulation", "validation", "state", "shared", "core"],
+      "rules": [
+        {
+          "id": "adr-0003-r1",
+          "rule": "Model entities as rich domain models with public getters and private setters.",
+          "severity": "required",
+          "appliesTo": "domain-model"
+        },
+        {
+          "id": "adr-0003-r2",
+          "rule": "Mutate entity state only through intent-revealing SetX() methods that validate before assigning.",
+          "severity": "required",
+          "appliesTo": "domain-model"
+        },
+        {
+          "id": "adr-0003-r3",
+          "rule": "Use validated value objects for changes that span multiple values.",
+          "severity": "required",
+          "appliesTo": "domain-model"
+        },
+        {
+          "id": "adr-0003-r4",
+          "rule": "Track entity lifecycle state (New, Pristine, Touched, Modified, Deleted).",
+          "severity": "recommended",
+          "appliesTo": "domain-model"
+        }
+      ]
     },
     {
       "id": "adr-0004",
@@ -40,7 +94,27 @@
       "status": "accepted",
       "date": "2026-07-03",
       "summary": "Every solution is a Modular Monolith or Microservices layout. Each bounded context is one module of two projects (module + abstractions). Microservices add a per-module API project; the modular monolith has one root API project. Shared code lives in a Shared folder and the whole solution is rooted under src.",
-      "tags": ["architecture", "modular-monolith", "microservices", "bounded-context", "module", "abstractions", "solution-structure", "shared"]
+      "tags": ["architecture", "modular-monolith", "microservices", "bounded-context", "module", "abstractions", "solution-structure", "shared"],
+      "rules": [
+        {
+          "id": "adr-0004-r1",
+          "rule": "Structure every solution as either a Modular Monolith or a Microservices layout.",
+          "severity": "required",
+          "appliesTo": "solution-structure"
+        },
+        {
+          "id": "adr-0004-r2",
+          "rule": "Implement each bounded context as one module of two projects: the module and its abstractions.",
+          "severity": "required",
+          "appliesTo": "solution-structure"
+        },
+        {
+          "id": "adr-0004-r3",
+          "rule": "Root the whole solution under src and place shared code in a Shared folder.",
+          "severity": "required",
+          "appliesTo": "solution-structure"
+        }
+      ]
     },
     {
       "id": "adr-0005",
@@ -50,7 +124,27 @@
       "status": "accepted",
       "date": "2026-07-03",
       "summary": "Use CQRS with hand-written base classes in a shared project for command, query, command handler and query handler. HTTP requests receive a DTO record; the endpoint converts it to a command or query and dispatches to a DI-resolved handler. Queries always return a response, command responses are optional. External CQRS/mediator libraries are strictly prohibited.",
-      "tags": ["cqrs", "command", "query", "handler", "dto", "dependency-injection", "no-external-libraries", "shared"]
+      "tags": ["cqrs", "command", "query", "handler", "dto", "dependency-injection", "no-external-libraries", "shared"],
+      "rules": [
+        {
+          "id": "adr-0005-r1",
+          "rule": "Use CQRS with hand-written base classes in a shared project for commands, queries and their handlers.",
+          "severity": "required",
+          "appliesTo": "application-layer"
+        },
+        {
+          "id": "adr-0005-r2",
+          "rule": "Convert an incoming DTO record into a command or query in the endpoint and dispatch it to a DI-resolved handler.",
+          "severity": "required",
+          "appliesTo": "application-layer"
+        },
+        {
+          "id": "adr-0005-r3",
+          "rule": "Do not use external CQRS or mediator libraries.",
+          "severity": "prohibited",
+          "appliesTo": "application-layer"
+        }
+      ]
     },
     {
       "id": "adr-0006",
@@ -60,7 +154,15 @@
       "status": "accepted",
       "date": "2026-07-03",
       "summary": "Every endpoint is a feature (CreateUser, UpdateUser, ...). Features are always organized in the module's Features namespace, with a per-feature namespace named after the feature that contains the command or query and its handler. This organization is strictly required.",
-      "tags": ["feature-slice", "vertical-slice", "features", "namespace", "cqrs", "organization", "module"]
+      "tags": ["feature-slice", "vertical-slice", "features", "namespace", "cqrs", "organization", "module"],
+      "rules": [
+        {
+          "id": "adr-0006-r1",
+          "rule": "Model every endpoint as a feature placed in the module's Features namespace, under a per-feature namespace named after the feature that holds its command/query and handler.",
+          "severity": "required",
+          "appliesTo": "module"
+        }
+      ]
     },
     {
       "id": "adr-0007",
@@ -70,7 +172,21 @@
       "status": "accepted",
       "date": "2026-07-03",
       "summary": "All HTTP endpoint mappings are organized in the module library; API projects contain no endpoint mappings. Every module exposes two extension methods: one on the host builder to register all handlers (AddCartModule()) and one on the web app to map all endpoints (MapCartEndpoints()). Endpoints live in an Endpoints namespace and use MapGroup pragmatically.",
-      "tags": ["http", "endpoints", "module", "portability", "dependency-injection", "minimal-api", "mapgroup", "extension-method"]
+      "tags": ["http", "endpoints", "module", "portability", "dependency-injection", "minimal-api", "mapgroup", "extension-method"],
+      "rules": [
+        {
+          "id": "adr-0007-r1",
+          "rule": "Organize all HTTP endpoint mappings in the module library; API projects must contain no endpoint mappings.",
+          "severity": "required",
+          "appliesTo": "module"
+        },
+        {
+          "id": "adr-0007-r2",
+          "rule": "Expose two extension methods per module: AddXModule() on the host builder to register handlers, and MapXEndpoints() on the web app to map endpoints.",
+          "severity": "required",
+          "appliesTo": "module"
+        }
+      ]
     },
     {
       "id": "adr-0008",
@@ -80,7 +196,27 @@
       "status": "accepted",
       "date": "2026-07-03",
       "summary": "Use Aspire (formerly .NET Aspire) for orchestration and service integration in all solutions. Aspire projects live in an Aspire folder under src. When integrating a service, always use the client library that comes with the corresponding Aspire integration.",
-      "tags": ["aspire", "dotnet-aspire", "orchestration", "integrations", "client-library", "service-discovery", "telemetry"]
+      "tags": ["aspire", "dotnet-aspire", "orchestration", "integrations", "client-library", "service-discovery", "telemetry"],
+      "rules": [
+        {
+          "id": "adr-0008-r1",
+          "rule": "Use Aspire for orchestration and service integration in all solutions.",
+          "severity": "required",
+          "appliesTo": "orchestration"
+        },
+        {
+          "id": "adr-0008-r2",
+          "rule": "Place Aspire projects in an Aspire folder under src.",
+          "severity": "required",
+          "appliesTo": "solution-structure"
+        },
+        {
+          "id": "adr-0008-r3",
+          "rule": "When integrating a service, use the client library that ships with the corresponding Aspire integration.",
+          "severity": "required",
+          "appliesTo": "integrations"
+        }
+      ]
     },
     {
       "id": "guideline-unit-testing",
@@ -90,7 +226,27 @@
       "status": "accepted",
       "date": "2026-07-03",
       "summary": "Use xUnit with the xunit.v3 NuGet package. Moq and Bogus.NET are approved for mocking and fake data. FluentAssertions is not allowed (commercial license).",
-      "tags": ["testing", "unit-testing", "xunit", "xunit.v3", "moq", "bogus", "fluentassertions"]
+      "tags": ["testing", "unit-testing", "xunit", "xunit.v3", "moq", "bogus", "fluentassertions"],
+      "rules": [
+        {
+          "id": "guideline-unit-testing-r1",
+          "rule": "Use xUnit with the xunit.v3 NuGet package for unit tests; do not use the older xunit v2 packages.",
+          "severity": "required",
+          "appliesTo": "tests"
+        },
+        {
+          "id": "guideline-unit-testing-r2",
+          "rule": "Do not use FluentAssertions; it ships under a commercial license.",
+          "severity": "prohibited",
+          "appliesTo": "tests"
+        },
+        {
+          "id": "guideline-unit-testing-r3",
+          "rule": "Use Moq for mocking and Bogus.NET for generating fake data.",
+          "severity": "recommended",
+          "appliesTo": "tests"
+        }
+      ]
     }
   ]
 }

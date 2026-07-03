@@ -13,9 +13,18 @@ updated in this repository without releasing a new version of the tool.
 
 | Tool | Description |
 | --- | --- |
-| `list_documents` | List every ADR and guideline with its metadata. |
-| `search_documents` | Search documents by keyword (id, title, summary, type, status, tags). |
+| `list_documents` | List every ADR and guideline with its metadata (active documents only by default). |
+| `search_documents` | Search documents by keyword over their **metadata** (id, title, summary, type, status, tags). |
+| `search_document_contents` | Full-text search across the Markdown **body** of every document, returning matching snippets. |
+| `get_rules` | Return the concrete do's/don'ts (required / prohibited / recommended), each linked to its source document; filter by area or keyword. |
+| `find_guidance_for_task` | Rank the most relevant documents for a free-text description of the task you are working on. |
+| `list_topics` | List every topic/tag with how many documents use it. |
+| `related_documents` | For a document id, return what it supersedes, what supersedes it, and the documents sharing the most tags. |
 | `get_document` | Return one complete document, including its full Markdown, by id. |
+| `refresh_cache` | Clear the local cache and immediately re-download the latest manifest and documents. |
+
+Documents are fetched from GitHub and cached locally for up to **two hours**; use
+`refresh_cache` to pick up changes sooner.
 
 ## Installation
 
@@ -52,6 +61,7 @@ environment variables on the server entry:
 
 | Variable | Default | Purpose |
 | --- | --- | --- |
+| `GitHub__ApiBaseUrl` | `https://api.github.com/` | GitHub REST API base; override for GitHub Enterprise Server. |
 | `GitHub__Organization` | `4Dotnet` | Repository owner. |
 | `GitHub__Repository` | `csharp-style-guide` | Repository name. |
 | `GitHub__Branch` | `main` | Branch/ref to read from. |

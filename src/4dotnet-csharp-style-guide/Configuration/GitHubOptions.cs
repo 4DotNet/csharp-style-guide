@@ -8,6 +8,12 @@ public sealed class GitHubOptions
 {
     public const string SectionName = "GitHub";
 
+    /// <summary>
+    /// Base address of the GitHub REST API. Defaults to public GitHub; override this
+    /// to target a GitHub Enterprise Server instance (e.g. https://github.contoso.com/api/v3/).
+    /// </summary>
+    public string ApiBaseUrl { get; set; } = "https://api.github.com/";
+
     /// <summary>GitHub organization (or user) that owns the repository.</summary>
     public string Organization { get; set; } = "4Dotnet";
 

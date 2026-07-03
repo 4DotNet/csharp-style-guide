@@ -19,12 +19,12 @@ builder.Services
     .AddOptions<GitHubOptions>()
     .Bind(builder.Configuration.GetSection(GitHubOptions.SectionName));
 
-// Typed HttpClient pointed at the GitHub REST API, configured from GitHubOptions.
-builder.Services.AddHttpClient<IStyleGuideDocumentService, GitHubStyleGuideDocumentService>((provider, client) =>
+// Named HttpClient pointed at the GitHub REST API, configured from GitHubOptions.
+builder.Services.AddHttpClient(GitHubStyleGuideDocumentService.HttpClientName, (provider, client) =>
 {
     var options = provider.GetRequiredService<IOptions<GitHubOptions>>().Value;
 
-    client.BaseAddress = new Uri("https://api.github.com/");
+    client.BaseAddress = new Uri(options.ApiBaseUrl);
     client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("4dotnet-csharp-style-guide", "1.0"));
     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
 
@@ -33,6 +33,9 @@ builder.Services.AddHttpClient<IStyleGuideDocumentService, GitHubStyleGuideDocum
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", options.Token);
     }
 });
+
+// Singleton so the 2-hour document/manifest cache is shared across all tool calls.
+builder.Services.AddSingleton<IStyleGuideDocumentService, GitHubStyleGuideDocumentService>();
 
 builder.Services
     .AddMcpServer(options =>

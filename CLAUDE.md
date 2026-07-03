@@ -25,9 +25,17 @@ The server does **not** read the documents from local/hard-coded files. It downl
 A .NET 10 console app (`net10.0`, assembly name `4dotnet-csharp-style-guide`, root namespace `FourDotNet.CSharpStyleGuide`) that runs as a **stdio** MCP server using the `ModelContextProtocol` SDK.
 
 - **`Program.cs`** — generic-host bootstrap. Binds the `GitHub` config section, registers a typed `HttpClient` against `https://api.github.com/`, and registers the MCP server (name set explicitly to `4dotnet-csharp-style-guide`) with `StyleGuideTools`. Logging goes to **stderr** — stdout is the JSON-RPC channel and must not be written to.
-- **`Configuration/GitHubOptions.cs`** — the `GitHub` config section: `Organization` (default `4Dotnet`), `Repository` (default `csharp-style-guide`), `Branch` (default `main`), `DesignsPath` (default `designs`), and an optional `Token` for higher rate limits / private repos. Defaults also live in `appsettings.json`.
-- **`Documents/`** — `DocumentDescriptor`/`DocumentIndex` (deserialized `index.json`), the `IStyleGuideDocumentService` contract, and `GitHubStyleGuideDocumentService`, which fetches `index.json` and each document via the **GitHub Contents API** (`GET repos/{org}/{repo}/contents/{path}?ref={branch}` with `Accept: application/vnd.github.raw+json`). The manifest is cached in-process for 5 minutes.
-- **`Tools/StyleGuideTools.cs`** — the three MCP tools: `list_documents`, `search_documents` (keyword match over id/title/summary/type/status/tags), and `get_document` (full Markdown by id).
+- **`Configuration/GitHubOptions.cs`** — the `GitHub` config section: `ApiBaseUrl` (default `https://api.github.com/`, override for GitHub Enterprise), `Organization` (default `4Dotnet`), `Repository` (default `csharp-style-guide`), `Branch` (default `main`), `DesignsPath` (default `designs`), and an optional `Token` for higher rate limits / private repos. Defaults also live in `appsettings.json`.
+- **`Documents/`** — `DocumentDescriptor`/`DocumentIndex`/`RuleDescriptor` (deserialized `index.json`), the service result records in `ServiceModels.cs`, the `IStyleGuideDocumentService` contract, and `GitHubStyleGuideDocumentService`, which fetches `index.json` and each document via the **GitHub Contents API** (`GET repos/{org}/{repo}/contents/{path}?ref={branch}` with `Accept: application/vnd.github.raw+json`). Both the manifest and each document body are cached for **2 hours** (`CacheDuration`); `refresh_cache` clears and re-warms them.
+- **`Tools/StyleGuideTools.cs`** — nine MCP tools: `list_documents`, `search_documents` (metadata match), `search_document_contents` (body match with snippets), `get_rules` (flattened rules from the manifest), `find_guidance_for_task` (relevance-ranked), `list_topics` (tag counts), `related_documents` (supersedes/superseded-by + shared tags), `get_document` (full Markdown), and `refresh_cache`. Inactive documents (status `deprecated`/`superseded`, or superseded by another) are excluded unless `includeInactive` is passed.
+
+### DI lifetime note
+
+`GitHubStyleGuideDocumentService` is registered as a **singleton** (via `AddSingleton`) so its in-memory cache is shared across all tool calls. Its HTTP access goes through a **named** `HttpClient` (`GitHubStyleGuideDocumentService.HttpClientName`) resolved per-request from `IHttpClientFactory` — do **not** switch it to a typed `HttpClient` (`AddHttpClient<T>`), which registers the service as transient and silently defeats the cache.
+
+### Manifest format
+
+Each `designs/index.json` entry may declare `rules` (`{ id, rule, severity: required|prohibited|recommended, appliesTo }`) that back `get_rules`, and an optional `supersedes` id that marks the older document inactive and links related documents. `designs/index.schema.json` is the source of truth for the format — keep it in sync when adding fields.
 
 Because documents are fetched from GitHub at runtime, the tools serve whatever is on the configured branch — they will only see documents that have been **committed and pushed**, not local working-tree changes.
 
