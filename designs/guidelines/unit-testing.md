@@ -27,6 +27,25 @@ module library it exercises, with a `.Tests` suffix:
 - The test project references only the module it tests (plus its transitive
   dependencies); keep the one-to-one mapping between a module and its tests clear.
 
+Test projects live in a **central `Tests` folder** under `src` — **not** inside
+the module folder. This keeps the module folders focused on shippable code while
+still keeping the one-to-one module-to-test mapping obvious through the project
+name:
+
+```
+src/
+  Cart/
+    FourDotnet.Webshop.Cart/
+      FourDotnet.Webshop.Cart.csproj
+    FourDotnet.Webshop.Cart.Abstractions/
+      FourDotnet.Webshop.Cart.Abstractions.csproj
+  Tests/
+    FourDotnet.Webshop.Cart.Tests/
+      FourDotnet.Webshop.Cart.Tests.csproj
+    FourDotnet.Webshop.Ordering.Tests/
+      FourDotnet.Webshop.Ordering.Tests.csproj
+```
+
 ## Code coverage: at least 80% of the module library
 
 Each module's test project **must** cover **at least 80%** of the code in its

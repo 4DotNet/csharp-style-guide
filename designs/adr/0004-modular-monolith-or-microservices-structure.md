@@ -108,6 +108,9 @@ src/
       FourDotnet.Webshop.Shared.csproj
     FourDotnet.Webshop.Core/
       FourDotnet.Webshop.Core.csproj
+  Tests/
+    FourDotnet.Webshop.Cart.Tests/
+      FourDotnet.Webshop.Cart.Tests.csproj
 ```
 
 **Modular Monolith:**
@@ -124,6 +127,9 @@ src/
       FourDotnet.Webshop.Shared.csproj
     FourDotnet.Webshop.Core/
       FourDotnet.Webshop.Core.csproj
+  Tests/
+    FourDotnet.Webshop.Cart.Tests/
+      FourDotnet.Webshop.Cart.Tests.csproj
   FourDotnet.Webshop.Api/
     FourDotnet.Webshop.Api.csproj
 ```

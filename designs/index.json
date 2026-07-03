@@ -230,7 +230,7 @@
       "rules": [
         {
           "id": "guideline-unit-testing-r4",
-          "rule": "Every module must have a dedicated unit test project named after the module library with a .Tests suffix (e.g. FourDotnet.Webshop.Cart.Tests for FourDotnet.Webshop.Cart); do not share one test project across modules.",
+          "rule": "Every module must have a dedicated unit test project named after the module library with a .Tests suffix (e.g. FourDotnet.Webshop.Cart.Tests for FourDotnet.Webshop.Cart); do not share one test project across modules. Place test projects in a central src/Tests folder, not inside the module folder.",
           "severity": "required",
           "appliesTo": "tests"
         },
