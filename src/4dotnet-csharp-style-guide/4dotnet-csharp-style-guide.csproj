@@ -9,8 +9,26 @@
     <RootNamespace>FourDotNet.CSharpStyleGuide</RootNamespace>
   </PropertyGroup>
 
+  <!-- Package this app as a globally-installable .NET tool -->
+  <PropertyGroup>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>4dotnet-csharp-style-guide</ToolCommandName>
+    <PackageId>4dotnet-csharp-style-guide</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>4DotNet</Authors>
+    <Company>4DotNet</Company>
+    <Description>MCP server that exposes the opinionated 4DotNet C# style guide (ADRs and guidelines) to AI tools. Documents are served from GitHub at runtime.</Description>
+    <PackageTags>mcp;model-context-protocol;csharp;dotnet;style-guide;adr;ai</PackageTags>
+    <PackageProjectUrl>https://github.com/4Dotnet/csharp-style-guide</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/4Dotnet/csharp-style-guide</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Update="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>

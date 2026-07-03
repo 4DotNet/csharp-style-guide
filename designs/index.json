@@ -23,6 +23,16 @@
       "tags": ["aspnetcore", "web-api", "minimal-api", "controllers", "endpoints", "standard"]
     },
     {
+      "id": "adr-0003",
+      "type": "adr",
+      "title": "Pragmatic Domain-Driven Design with rich domain models",
+      "path": "adr/0003-pragmatic-ddd-domain-models.md",
+      "status": "accepted",
+      "date": "2026-07-03",
+      "summary": "Entities are rich domain models with public getters and private setters. Changes go through intent-revealing SetX() functions that validate before assigning; multi-value changes use validated value objects. Models track lifecycle state (New, Pristine, Touched, Modified, Deleted) with base-class plumbing kept in a shared project.",
+      "tags": ["ddd", "domain-model", "value-object", "encapsulation", "validation", "state", "shared", "core"]
+    },
+    {
       "id": "guideline-unit-testing",
       "type": "guideline",
       "title": "Unit testing",
