@@ -47,9 +47,22 @@ dotnet build src/4dotnet-csharp-style-guide/4dotnet-csharp-style-guide.csproj
 
 # run the server (stdio; talk MCP JSON-RPC over stdin/stdout)
 dotnet run --project src/4dotnet-csharp-style-guide/4dotnet-csharp-style-guide.csproj
+
+# run all tests
+dotnet test
+
+# run a single test by name
+dotnet test --filter "FullyQualifiedName~GitHubStyleGuideDocumentServiceTests.ListDocuments_excludes_superseded_and_deprecated_by_default"
 ```
 
-There is no test project yet. When one is added, document how to run it (and a single test) here.
+### Tests
+
+`tests/4dotnet-csharp-style-guide.Tests` is an **xUnit** project (referenced by `csharp-style-guide.sln`). It uses **NSubstitute** for fakes and runs entirely offline:
+
+- **`GitHubStyleGuideDocumentServiceTests`** exercises the real `GitHubStyleGuideDocumentService` against a `StubHttpMessageHandler` that serves a canned `index.json` and document bodies (see `Infrastructure/TestData.cs`) — covering active/inactive filtering, metadata and body search, rule aggregation, task-relevance ranking, topic counts, related-document resolution, and that the manifest/document caches avoid repeat GitHub calls.
+- **`StyleGuideToolsTests`** verifies the `StyleGuideTools` MCP layer projects service results into the response records and throws `McpException` for unknown ids, using a faked `IStyleGuideDocumentService`.
+
+When adding a tool or service method, add coverage in the matching test class and extend `TestData.cs` if a new manifest shape is needed.
 
 ## Working notes
 

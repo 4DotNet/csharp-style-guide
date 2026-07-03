@@ -225,9 +225,21 @@
       "path": "guidelines/unit-testing.md",
       "status": "accepted",
       "date": "2026-07-03",
-      "summary": "Use xUnit with the xunit.v3 NuGet package. Moq and Bogus.NET are approved for mocking and fake data. FluentAssertions is not allowed (commercial license).",
-      "tags": ["testing", "unit-testing", "xunit", "xunit.v3", "moq", "bogus", "fluentassertions"],
+      "summary": "Every module must have a dedicated unit test project (e.g. FourDotnet.Webshop.Cart.Tests) covering at least 80% of its module library; abstractions projects are excluded. Use xUnit with the xunit.v3 NuGet package. Moq and Bogus.NET are approved for mocking and fake data. FluentAssertions is not allowed (commercial license).",
+      "tags": ["testing", "unit-testing", "code-coverage", "modular-monolith", "xunit", "xunit.v3", "moq", "bogus", "fluentassertions"],
       "rules": [
+        {
+          "id": "guideline-unit-testing-r4",
+          "rule": "Every module must have a dedicated unit test project named after the module library with a .Tests suffix (e.g. FourDotnet.Webshop.Cart.Tests for FourDotnet.Webshop.Cart); do not share one test project across modules.",
+          "severity": "required",
+          "appliesTo": "tests"
+        },
+        {
+          "id": "guideline-unit-testing-r5",
+          "rule": "A module's test project must cover at least 80% of its module library (e.g. FourDotnet.Webshop.Cart); coverage of abstractions projects is excluded from this threshold.",
+          "severity": "required",
+          "appliesTo": "tests"
+        },
         {
           "id": "guideline-unit-testing-r1",
           "rule": "Use xUnit with the xunit.v3 NuGet package for unit tests; do not use the older xunit v2 packages.",

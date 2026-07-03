@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/4dotnet-csharp-style-guide/4dotnet-csharp-style-guide.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/4dotnet-csharp-style-guide.Tests/4dotnet-csharp-style-guide.Tests.csproj" />
+  </Folder>
+</Solution>

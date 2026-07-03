@@ -5,9 +5,44 @@
 
 ## Summary
 
-Write unit tests with **xUnit**, using the **`xunit.v3`** NuGet package. **Moq**
-and **Bogus.NET** are approved for mocking and fake-data generation. **Do not use
-FluentAssertions** — it ships under a commercial license.
+Every module **must** have a dedicated unit test project that covers **at least
+80%** of its module library. Write unit tests with **xUnit**, using the
+**`xunit.v3`** NuGet package. **Moq** and **Bogus.NET** are approved for mocking
+and fake-data generation. **Do not use FluentAssertions** — it ships under a
+commercial license.
+
+## A dedicated test project per module
+
+Each module **must** have its own dedicated unit test project. Name it after the
+module library it exercises, with a `.Tests` suffix:
+
+| Module library                 | Test project                         |
+| ------------------------------ | ------------------------------------ |
+| `FourDotnet.Webshop.Cart`      | `FourDotnet.Webshop.Cart.Tests`      |
+| `FourDotnet.Webshop.Ordering`  | `FourDotnet.Webshop.Ordering.Tests`  |
+
+- One test project per module — do **not** share a single test project across
+  multiple modules, and do **not** fold a module's tests into another module's
+  test project.
+- The test project references only the module it tests (plus its transitive
+  dependencies); keep the one-to-one mapping between a module and its tests clear.
+
+## Code coverage: at least 80% of the module library
+
+Each module's test project **must** cover **at least 80%** of the code in its
+module library — the project that holds the module's behaviour (for example
+`FourDotnet.Webshop.Cart`). This is the number that gates the module.
+
+Coverage of a module's **abstractions** project (for example
+`FourDotnet.Webshop.Cart.Abstractions`) is **less relevant** and is **not**
+counted toward the 80% threshold. Abstractions projects contain contracts —
+interfaces, DTOs, records and other declarations with little or no behaviour — so
+driving their line coverage adds little value. Focus coverage effort on the module
+library where the logic actually lives.
+
+> Measure coverage of the module library specifically, not of the whole solution.
+> A solution-wide percentage can hide an under-tested module behind well-covered
+> ones and lets low-value abstractions coverage inflate the number.
 
 ## Test framework: xUnit (v3)
 
@@ -80,6 +115,13 @@ for the vast majority of tests.
 
 ## Rationale
 
+- A **dedicated test project per module** keeps the modular boundary intact: tests
+  live and version alongside the module they cover, and coverage can be measured
+  and enforced per module rather than blurred across the solution.
+- The **80% module-library threshold** sets a concrete, enforceable bar for the
+  code that carries behaviour, while excluding **abstractions** projects keeps the
+  metric honest — contracts have little logic to exercise, so counting them would
+  only let low-value coverage inflate the number.
 - **`xunit.v3`** is the actively maintained line; older `xunit` v2 packages are
   outdated and should not seed new test projects.
 - **Moq** and **Bogus.NET** keep tests focused and readable by removing dependency
