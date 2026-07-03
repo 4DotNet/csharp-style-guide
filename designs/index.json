@@ -73,6 +73,16 @@
       "tags": ["http", "endpoints", "module", "portability", "dependency-injection", "minimal-api", "mapgroup", "extension-method"]
     },
     {
+      "id": "adr-0008",
+      "type": "adr",
+      "title": "Adopt Aspire for orchestration and service integration",
+      "path": "adr/0008-adopt-aspire.md",
+      "status": "accepted",
+      "date": "2026-07-03",
+      "summary": "Use Aspire (formerly .NET Aspire) for orchestration and service integration in all solutions. Aspire projects live in an Aspire folder under src. When integrating a service, always use the client library that comes with the corresponding Aspire integration.",
+      "tags": ["aspire", "dotnet-aspire", "orchestration", "integrations", "client-library", "service-discovery", "telemetry"]
+    },
+    {
       "id": "guideline-unit-testing",
       "type": "guideline",
       "title": "Unit testing",
