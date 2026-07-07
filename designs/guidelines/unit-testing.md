@@ -112,13 +112,18 @@ var faker = new Faker<Customer>()
 var customer = faker.Generate();
 ```
 
-## Assertions: do NOT use FluentAssertions
+## Assertions: use .NET-native xUnit asserts
+
+**Write assertions with the .NET-native xUnit `Assert` API.** It is the default
+and expected assertion style across our projects.
 
 **FluentAssertions is not allowed.** As of version 8 it is distributed under a
 **commercial license**, which makes it unsuitable as a default dependency across
 our projects.
 
-Use xUnit's built-in assertions instead:
+Write assertions with xUnit's **built-in, .NET-native `Assert` API**. It ships
+with the test framework, has no extra licensing or dependency cost, and is more
+than expressive enough for the vast majority of tests:
 
 ```csharp
 Assert.Equal(expected, actual);
@@ -127,10 +132,10 @@ Assert.Throws<InvalidOperationException>(() => service.Process(order));
 Assert.Contains(item, collection);
 ```
 
-If a more expressive, fluent assertion style is genuinely needed, use a
-permissively licensed alternative (for example, **Shouldly**) rather than
-FluentAssertions — but plain xUnit assertions are the default and are sufficient
-for the vast majority of tests.
+The native `Assert` API covers equality, boolean conditions, exceptions,
+collections, ranges, types and null checks. Reach for these first — do **not**
+add a separate fluent-assertion library. Plain xUnit assertions are the default
+and the expectation across our projects.
 
 ## Rationale
 
@@ -145,5 +150,8 @@ for the vast majority of tests.
   outdated and should not seed new test projects.
 - **Moq** and **Bogus.NET** keep tests focused and readable by removing dependency
   and fixture boilerplate.
-- **FluentAssertions** moved to a **commercial license**, introducing licensing
-  cost and risk. Avoiding it keeps our test dependencies free and unambiguous.
+- **.NET-native xUnit asserts** ship with the framework, add no licensing or
+  dependency cost, and are expressive enough for nearly every test — so they are
+  the default. **FluentAssertions** moved to a **commercial license**, introducing
+  licensing cost and risk; avoiding it keeps our test dependencies free and
+  unambiguous.

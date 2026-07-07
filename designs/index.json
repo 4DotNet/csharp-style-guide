@@ -219,14 +219,56 @@
       ]
     },
     {
+      "id": "adr-0009",
+      "type": "adr",
+      "title": "Adopt OpenTelemetry for full observability",
+      "path": "adr/0009-opentelemetry-observability.md",
+      "status": "accepted",
+      "date": "2026-07-07",
+      "summary": "Instrument every solution with OpenTelemetry to its fullest. Traces and metrics are required, not optional. OTEL is configured in one place: through the Aspire ServiceDefaults project when the solution uses Aspire, otherwise through a single central AddObservability() extension method that every project calls. Command and query handlers must be richly instrumented — each starts an activity from a shared ActivitySource, tags it with meaningful attributes, records success/failure status, and emits counters and duration histograms via a shared Meter, with the common plumbing living in the CQRS base classes.",
+      "tags": ["observability", "opentelemetry", "otel", "tracing", "metrics", "telemetry", "aspire", "service-defaults", "cqrs", "command-handler", "query-handler", "activitysource", "meter", "otlp", "shared"],
+      "rules": [
+        {
+          "id": "adr-0009-r1",
+          "rule": "Instrument every solution with OpenTelemetry; enable both tracing and metrics as a required part of every change, not an optional add-on.",
+          "severity": "required",
+          "appliesTo": "observability"
+        },
+        {
+          "id": "adr-0009-r2",
+          "rule": "Configure OpenTelemetry in exactly one place: through the Aspire ServiceDefaults project (AddServiceDefaults()) when the solution uses Aspire, otherwise through a single central AddObservability() extension method in the Shared project that every project calls. Never configure OTEL ad hoc per module or host.",
+          "severity": "required",
+          "appliesTo": "observability"
+        },
+        {
+          "id": "adr-0009-r3",
+          "rule": "Instrument every command handler and query handler: start an activity from the shared ActivitySource named after the operation, tag it with meaningful attributes, and record error status (AddException) on failure.",
+          "severity": "required",
+          "appliesTo": "application-layer"
+        },
+        {
+          "id": "adr-0009-r4",
+          "rule": "Emit metrics from command and query handlers via the shared Meter — a counter for invocations/failures and a histogram for duration or domain measures — using low-cardinality tags. Place the common instrumentation plumbing in the CQRS base classes.",
+          "severity": "required",
+          "appliesTo": "application-layer"
+        },
+        {
+          "id": "adr-0009-r5",
+          "rule": "Do not put secrets or personal data on spans, and do not add a competing observability stack alongside OpenTelemetry.",
+          "severity": "prohibited",
+          "appliesTo": "observability"
+        }
+      ]
+    },
+    {
       "id": "guideline-unit-testing",
       "type": "guideline",
       "title": "Unit testing",
       "path": "guidelines/unit-testing.md",
       "status": "accepted",
       "date": "2026-07-03",
-      "summary": "Every module must have a dedicated unit test project (e.g. FourDotnet.Webshop.Cart.Tests) covering at least 80% of its module library; abstractions projects are excluded. Use xUnit with the xunit.v3 NuGet package. Moq and Bogus.NET are approved for mocking and fake data. FluentAssertions is not allowed (commercial license).",
-      "tags": ["testing", "unit-testing", "code-coverage", "modular-monolith", "xunit", "xunit.v3", "moq", "bogus", "fluentassertions"],
+      "summary": "Every module must have a dedicated unit test project (e.g. FourDotnet.Webshop.Cart.Tests) covering at least 80% of its module library; abstractions projects are excluded. Use xUnit with the xunit.v3 NuGet package. Write assertions with the .NET-native xUnit Assert API. Moq and Bogus.NET are approved for mocking and fake data. FluentAssertions is not allowed (commercial license).",
+      "tags": ["testing", "unit-testing", "code-coverage", "modular-monolith", "xunit", "xunit.v3", "assertions", "moq", "bogus", "fluentassertions"],
       "rules": [
         {
           "id": "guideline-unit-testing-r4",
@@ -250,6 +292,12 @@
           "id": "guideline-unit-testing-r2",
           "rule": "Do not use FluentAssertions; it ships under a commercial license.",
           "severity": "prohibited",
+          "appliesTo": "tests"
+        },
+        {
+          "id": "guideline-unit-testing-r6",
+          "rule": "Write assertions with the .NET-native xUnit Assert API; do not add a separate fluent-assertion library.",
+          "severity": "required",
           "appliesTo": "tests"
         },
         {
